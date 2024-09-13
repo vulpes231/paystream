@@ -1,6 +1,3 @@
-const express = require("express");
-const mongoose = require("mongoose");
-
 const sendServerError = (res, msg) => {
   res.status(500).json({ message: msg });
 };
@@ -18,8 +15,6 @@ const sendAccessError = (res) => {
 };
 
 module.exports = {
-  express,
-  mongoose,
   sendClientError,
   sendServerError,
   sendAuthError,

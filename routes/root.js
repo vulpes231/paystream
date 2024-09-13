@@ -1,4 +1,4 @@
-const { express } = require("../utils/utilities");
+const express = require("express");
 
 const router = express.Router();
 
