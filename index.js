@@ -15,6 +15,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// path to routes
+const userAuth = require("./routes/userRoutes/auth.js");
+const userControl = require("./routes/userRoutes/user.js");
+
+app.use("/auth", userAuth);
+app.use("/user", userControl);
 app.use("/", require("./routes/root"));
 
 app.use(logErrors);

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcyptjs");
-const bcrypt = require("bcyptjs");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Schema = mongoose.Schema;
 require("dotenv").config();
@@ -68,7 +67,7 @@ userSchema.statics.loginUser = async function (loginData) {
     if (!user) {
       throw new Error("User does not exist!");
     }
-
+    // console.log(user);
     const passwordMatch = await bcrypt.compare(
       loginData?.password,
       user.password
@@ -112,9 +111,10 @@ userSchema.statics.registerUser = async function (enrollData) {
     }
 
     const user = new this({
-      enrollData,
+      username,
+      email,
+      password,
     });
-
     await user.save();
 
     return { user };
@@ -138,6 +138,19 @@ userSchema.statics.logoutUser = async function (userId) {
   } catch (error) {
     console.error("Error logging out user:", error);
     throw new Error("An error occurred while logging out.");
+  }
+};
+
+userSchema.statics.getUser = async function (userId) {
+  try {
+    const user = await this.findById(userId);
+    if (!user) {
+      throw new Error("User not found!");
+    }
+    return user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw new Error("An error occurred while fetching user.");
   }
 };
 

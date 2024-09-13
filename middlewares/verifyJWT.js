@@ -9,6 +9,13 @@ const verifyToken = (req, res, next) => {
       return sendAuthError(res, "Login to use this service!");
     }
 
+    // Ensure the token format is correct
+    if (!token.startsWith("Bearer ")) {
+      return res
+        .status(401)
+        .json({ message: "Invalid authorization header format" });
+    }
+
     token = token.split(" ")[1];
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
@@ -20,6 +27,7 @@ const verifyToken = (req, res, next) => {
         username: decoded.username,
         userId: decoded.userId,
       };
+      console.log(req.user);
 
       next();
     });

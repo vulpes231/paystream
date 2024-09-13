@@ -1,4 +1,4 @@
-import User from "../../models/User";
+const User = require("../../models/User");
 
 const signinUser = async (req, res) => {
   const { username, password } = req.body;
@@ -25,7 +25,9 @@ const signinUser = async (req, res) => {
 };
 
 const signoutUser = async (req, res) => {
-  const userId = req.user.userId;
+  const { userId } = req.user;
+
+  if (!userId) return res.status(400).json({ message: "ID required!" });
   try {
     await User.logoutUser(userId);
 
@@ -44,8 +46,9 @@ const signoutUser = async (req, res) => {
 
 const signupUser = async (req, res) => {
   const { username, password, email } = req.body;
+  // console.log(req.body);
   try {
-    const enrollData = { username, email, password };
+    const enrollData = { username: username, email: email, password: password };
     await User.registerUser(enrollData);
     res.status(201).json({ message: `new user ${username} created.` });
   } catch (error) {
